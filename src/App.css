@@ -1,0 +1,46 @@
+body{
+  padding:0px;
+  margin:0px;
+}
+
+.HomePage{
+  background-color:black;
+  width: 100vw;
+  height:100vh;
+  display:flex;
+  flex-direction:column;
+  flex-wrap:wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.Calculator{
+  display:flex;
+  flex-direction:column;
+  align-items: center;
+  height: 50vh;
+  width: 50vw;
+  padding-bottom: 1px;
+  padding-left: 1px;
+  background-color: grey;
+  box-sizing:border-box;
+}
+
+.Screen{
+  width: 100%;
+  height:30%;
+  background-color: pink;
+}
+
+.MemoryRow{
+  width: 95%;
+  height: 10%;
+  background-color: yellow;
+}
+
+.ButtonsGrid{
+  display:grid;
+  height: 59%;
+  width: 99%;
+  background-color: blue;
+}
