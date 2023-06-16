@@ -21,7 +21,6 @@ body{
   height: 50vh;
   width: 50vw;
   padding-bottom: 1px;
-  padding-left: 1px;
   background-color: grey;
   box-sizing:border-box;
 }
@@ -40,7 +39,13 @@ body{
 
 .ButtonsGrid{
   display:grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
   height: 59%;
   width: 99%;
   background-color: blue;
+}
+
+.ButtonsGrid > div{
+  border: 1px solid white;
+  height: 100%
 }
