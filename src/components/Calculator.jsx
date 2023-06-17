@@ -1,54 +1,107 @@
-import React from 'react';
-import Button from './Button';
+import React, { useState } from 'react';
+import Button from './Button.jsx';
 
 export default function Calculator() {
-  const handleMultiplication = () => {
-    // Handle multiplication logic
+  const [input, setInput] = useState(0);
+  const [equation, setEquation] = useState('');
+  const [result, setResult] = useState(0);
+
+  const handleNumeric = (number) => {
+    setInput((prevInput) => prevInput * 10 + number);
   };
 
-  const handleAddition = () => {
-    // Handle addition logic
+  const handleCE = () => {
+    setInput(0);
   };
 
-  const handleDivision = () => {
-    // Handle division logic
+  const handleC = () => {
+    setInput(0);
+    setResult(0);
+    setEquation('');
   };
 
+  const handleBackspace = () => {
+    setInput((prevInput) => {
+      let inputString = prevInput.toString();
+      let newInputString = inputString.slice(0, -1);
+      return newInputString ? parseFloat(newInputString) : 0;
+    });
+  };
+
+  const handleMultiply = () => {
+    setInput(0);
+    setEquation((prevEquation) => prevEquation.concat(` ${input} * `));
+  };
+
+  const handleDivide = () => {
+    setInput(0);
+    setEquation((prevEquation) => prevEquation.concat(` ${input} / `));
+  };
+
+  const handleSubtract = () => {
+    setInput(0);
+    setEquation((prevEquation) => prevEquation.concat(` ${input} - `));
+  };
+
+  const handleAdd = () => {
+    setInput(0);
+    setEquation((prevEquation) => prevEquation.concat(` ${input} + `));
+  };
+
+  const handleNegate = () => {
+    setInput((prevInput) => prevInput * -1);
+  };
+
+  const handleDecimal = () => {
+    if (Number.isInteger(input)) {
+      setInput((prevInput) => prevInput + '.');
+    }
+  };
+
+  const handleEquals = () => {
+    setEquation((prevEquation) => {
+      const updatedEquation = prevEquation + input;
+      const evalResult = new Function('return ' + updatedEquation)();
+      setResult(evalResult);
+      setInput(evalResult);
+      return updatedEquation;
+    });
+  };
+  
   return (
-    <div className="HomePage">
-      <div className="Calculator">
+    <div className="Calculator">
       Calculator
-        <div className="Screen">Screen</div>
-        <div className="MemoryRow">Memory Row</div>
-        <div className="ButtonsGrid">
-          <div className="Button1">Button1</div>
-          <div className="Button2">Button2</div>
-          <div className="Button3">Button3</div>
-          <div className="Button4">Button4</div>
-          <div className="Button5">Button5</div>
-          <div className="Button6">Button6</div>
-          <div className="Button7">Button7</div>
-          <div className="Button8">Button8</div>
-          <div className="Button9">Button9</div>
-          <div className="Button10">Button10</div>
-          <div className="Button11">Button11</div>
-          <div className="Button12">Button12</div>
-          <div className="Button13">Button13</div>
-          <div className="Button14">Button14</div>
-          <div className="Button15">Button15</div>
-          <div className="Button16">Button16</div>
-          <div className="Button17">Button17</div>
-          <div className="Button18">Button18</div>
-          <div className="Button19">Button19</div>
-          <div className="Button20">Button20</div>
-          <div className="Button21">Button21</div>
-          <div className="Button22">Button22</div>
-          <div className="Button23">Button23</div>
-          <div className="Button24">Button24</div>
-        </div>
+      <div className="Screen">
+        {input}
+        <div className="ScreenEquation">{equation}</div>
+      </div>
+      <div className="MemoryRow">Memory Row</div>
+      <div className="ButtonsGrid">
+        <Button label="Percentage" onClick={() => handlePercentage()}></Button>
+        <Button label="CE" onClick={() => handleCE()}></Button>
+        <Button label="C" onClick={() => handleC()}></Button>
+        <Button label="Backspace" onClick={() => handleBackspace()}></Button>
+        <Button label="1/X" onClick={() => handleOneByX()}></Button>
+        <Button label="Squared" onClick={() => handleSquared()}></Button>
+        <Button label="RootX" onClick={() => handleRootX()}></Button>
+        <Button label="/" onClick={() => handleDivide()}></Button>
+        <Button label="7" onClick={() => handleNumeric(7)}></Button>
+        <Button label="8" onClick={() => handleNumeric(8)}></Button>
+        <Button label="9" onClick={() => handleNumeric(9)}></Button>
+        <Button label="*" onClick={() => handleMultiply()}></Button>
+        <Button label="4" onClick={() => handleNumeric(4)}></Button>
+        <Button label="5" onClick={() => handleNumeric(5)}></Button>
+        <Button label="6" onClick={() => handleNumeric(6)}></Button>
+        <Button label="-" onClick={() => handleSubtract()}></Button>
+        <Button label="1" onClick={() => handleNumeric(1)}></Button>
+        <Button label="2" onClick={() => handleNumeric(2)}></Button>
+        <Button label="3" onClick={() => handleNumeric(3)}></Button>
+        <Button label="+" onClick={() => handleAdd()}></Button>
+        <Button label="+-" onClick={() => handleNegate()}></Button>
+        <Button label="0" onClick={() => handleNumeric(0)}></Button>
+        <Button label="." onClick={() => handleDecimal()}></Button>
+        <Button label="=" onClick={() => handleEquals()}></Button>
       </div>
     </div>
-    
   );
 }
-

@@ -26,9 +26,20 @@ body{
 }
 
 .Screen{
+  color: white;
+  display:flex;
   width: 100%;
   height:30%;
-  background-color: pink;
+  background-color: black;
+  position: relative;
+}
+
+.ScreenEquation {
+  width: 20%;
+  height: 10%;
+  position: absolute;
+  top: 0;
+  right: 0;
 }
 
 .MemoryRow{
@@ -48,6 +59,10 @@ body{
   overflow-y: auto;
 }
 
-.ButtonsGrid > div{
-  border: 1px solid white;
+.ButtonsGrid Button{
+  font-size: 20px;
+  width: 100%;
+  height: 100%;
+  border: 1px solid black;
+  background-color: white;
 }
