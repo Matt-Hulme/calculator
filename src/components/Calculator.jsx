@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import Button from './Button.jsx';
+import { evaluate } from 'mathjs';
 
 export default function Calculator() {
   const [input, setInput] = useState(0);
   const [equation, setEquation] = useState('');
+  const [displayEquation, setDisplayEquation] = useState('');
   const [result, setResult] = useState(0);
 
   const handleNumeric = (number) => {
@@ -18,6 +20,7 @@ export default function Calculator() {
     setInput(0);
     setResult(0);
     setEquation('');
+    setDisplayEquation('');
   };
 
   const handleBackspace = () => {
@@ -31,21 +34,25 @@ export default function Calculator() {
   const handleMultiply = () => {
     setInput(0);
     setEquation((prevEquation) => prevEquation.concat(` ${input} * `));
+    setDisplayEquation((prevDisplayEquation) => prevDisplayEquation.concat(` ${input} *`));
   };
 
   const handleDivide = () => {
     setInput(0);
     setEquation((prevEquation) => prevEquation.concat(` ${input} / `));
+    setDisplayEquation((prevDisplayEquation) => prevDisplayEquation.concat(` ${input} /`));
   };
 
   const handleSubtract = () => {
     setInput(0);
     setEquation((prevEquation) => prevEquation.concat(` ${input} - `));
+    setDisplayEquation((prevDisplayEquation) => prevDisplayEquation.concat(` ${input} -`));
   };
 
   const handleAdd = () => {
     setInput(0);
     setEquation((prevEquation) => prevEquation.concat(` ${input} + `));
+    setDisplayEquation((prevDisplayEquation) => prevDisplayEquation.concat(` ${input} +`));
   };
 
   const handleNegate = () => {
@@ -58,32 +65,69 @@ export default function Calculator() {
     }
   };
 
+
   const handleEquals = () => {
     setEquation((prevEquation) => {
       const updatedEquation = prevEquation + input;
-      const evalResult = new Function('return ' + updatedEquation)();
+      const evalResult = evaluate(updatedEquation);
       setResult(evalResult);
-      setInput(evalResult);
-      return updatedEquation;
+      setInput(evalResult.toString());
+      return prevEquation + input + ' = ';
+    });
+  
+    setDisplayEquation((prevDisplayEquation) => {
+      const updatedDisplayEquation = prevDisplayEquation + ' ' + input + ' =';
+      return updatedDisplayEquation;
     });
   };
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  // const handleEquals = () => {
+  //   setEquation((prevEquation) => {
+      
+  //   });
+  
+  //   setDisplayEquation((prevDisplayEquation) => {
+
+  //   });
+  // };
+  
+  
+  
   
   return (
     <div className="Calculator">
       Calculator
       <div className="Screen">
-        {input}
-        <div className="ScreenEquation">{equation}</div>
+        <div className="ScreenResult">
+          {input}
+        </div>
+        <div className="ScreenEquation">{displayEquation}</div>
       </div>
       <div className="MemoryRow">Memory Row</div>
       <div className="ButtonsGrid">
-        <Button label="Percentage" onClick={() => handlePercentage()}></Button>
+        <Button label="%" onClick={() => handlePercentage()}></Button>
         <Button label="CE" onClick={() => handleCE()}></Button>
         <Button label="C" onClick={() => handleC()}></Button>
         <Button label="Backspace" onClick={() => handleBackspace()}></Button>
         <Button label="1/X" onClick={() => handleOneByX()}></Button>
-        <Button label="Squared" onClick={() => handleSquared()}></Button>
-        <Button label="RootX" onClick={() => handleRootX()}></Button>
+        <Button label="x^2" onClick={() => handleSquared()}></Button>
+        <Button label="2√x" onClick={() => handleRootX()}></Button>
         <Button label="/" onClick={() => handleDivide()}></Button>
         <Button label="7" onClick={() => handleNumeric(7)}></Button>
         <Button label="8" onClick={() => handleNumeric(8)}></Button>
