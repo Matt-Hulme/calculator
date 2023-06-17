@@ -67,19 +67,24 @@ export default function Calculator() {
 
 
   const handleEquals = () => {
+   
+
+
+
+  const handleEquals = () => {
     setEquation((prevEquation) => {
-      const updatedEquation = prevEquation + input;
-      const evalResult = evaluate(updatedEquation);
+      let updatedEquation = prevEquation + input;
+      let evalResult = evaluate(updatedEquation);
       setResult(evalResult);
       setInput(evalResult.toString());
-      return prevEquation + input + ' = ';
+      return evalResult.toString();
     });
   
     setDisplayEquation((prevDisplayEquation) => {
       const updatedDisplayEquation = prevDisplayEquation + ' ' + input + ' =';
       return updatedDisplayEquation;
     });
-  };
+    
   
   
 
