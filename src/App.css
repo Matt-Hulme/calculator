@@ -43,6 +43,9 @@ body{
   height: 59%;
   width: 99%;
   background-color: blue;
+  flex-wrap:wrap;
+  flex-grow: 1;
+  overflow-y: auto;
 }
 
 .ButtonsGrid > div{
