@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, } from 'react';
 import Button from './Button.jsx';
 import { evaluate } from 'mathjs';
 
@@ -6,7 +6,6 @@ export default function Calculator() {
   const [ input, setInput] = useState(0);
   const [ result, setResult] = useState(0);
   const [ equation, setEquation] = useState('');
-  const [ equationDisplay, setEquationDisplay] = useState('');
   const [ history, setHistory] = useState([]);
 
   
@@ -16,7 +15,7 @@ export default function Calculator() {
       if (prevInput === 0 || !prevInput.toString().includes('.')) {
         newInput = prevInput * 10 + number;
       } else {
-        newInput = parseFloat(prevInput.toString() + '.' + number.toString());
+        newInput = parseFloat(prevInput.toString() + number.toString());
       }
       const newEquation = equation + number;
       setResult(evaluate(newEquation));
@@ -26,13 +25,12 @@ export default function Calculator() {
   };
   
   
-  
-  
-  
-  
-  
   const handleDecimal = () => {
-    if (Number.isInteger(input)) {
+    if (input === 0){
+      setInput((prevInput) => prevInput + '.');
+      setEquation((prevEquation) => prevEquation + '0.')
+    }
+    else if (Number.isInteger(input)) {
       setInput((prevInput) => prevInput + '.');
       setEquation((prevEquation) => prevEquation + '.')
     }
@@ -43,8 +41,8 @@ export default function Calculator() {
     setInput(0);
     setResult(0);
     setEquation('');
-    setEquationDisplay('');
   };
+
 
   const handleBackspace = () => {
     setInput((prevInput) => {
@@ -53,25 +51,22 @@ export default function Calculator() {
       const newInput = newInputString ? parseFloat(newInputString) : 0;
   
       setEquation((prevEquation) => {
-        const lastCharIndex = prevEquation.length - 1;
-        let newEquation = prevEquation;
-        if (prevEquation.charAt(lastCharIndex) === ' ') {
-          newEquation = prevEquation.slice(0, lastCharIndex - 2);
-        } else {
-          newEquation = prevEquation.slice(0, lastCharIndex);
-        }
+        const newEquation = prevEquation.slice(0, -1);
         setResult(evaluate(newEquation));
         return newEquation;
       });
-  
       return newInput;
     });
   };
   
   
+  
+  
+  
+  
+  
+  
 
-  
-  
   const handleMultiply = () => {
   };
 
@@ -104,6 +99,7 @@ export default function Calculator() {
       <div className="Screen">
         <div className="ScreenResult">{result}</div>
         <div className="ScreenEquation">{equation}</div>
+        <div className="InputDisplay">{input}</div>
       </div>
       <div className="MemoryRow">Memory Row</div>
       <div className ="ClearRow" onClick={() => handleC()}>Clear</div>
