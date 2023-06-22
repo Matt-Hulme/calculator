@@ -49,21 +49,21 @@ export default function Calculator() {
       const inputString = prevInput.toString();
       const newInputString = inputString.slice(0, -1);
       const newInput = newInputString ? parseFloat(newInputString) : 0;
-  
-      setEquation((prevEquation) => {
-        const newEquation = prevEquation.slice(0, -1);
-        setResult(evaluate(newEquation));
-        return newEquation;
-      });
       return newInput;
     });
+  
+    setEquation((prevEquation) => {
+      const lastCharacter = prevEquation.slice(-1);
+      let newEquation;
+      if (lastCharacter && /\W/.test(lastCharacter)) {
+        newEquation = prevEquation.slice(0, -2);
+      } else {
+        newEquation = prevEquation.slice(0, -1);
+      }
+      setResult(evaluate(newEquation));
+      return newEquation;
+    });
   };
-  
-  
-  
-  
-  
-  
   
   
 
