@@ -15,8 +15,8 @@ body{
 }
 
 .Calculator{
-  min-width: 100px;
-  max-width: 400px;
+  min-width: 375px;
+  max-width: 375px;
   display:flex;
   flex-direction:column;
   align-items: center;
@@ -34,7 +34,8 @@ body{
   height:30%;
   background-color: black;
   flex-wrap: wrap;
-  position: relative
+  position: relative;
+  overflow-x: auto;
 
 }
 
@@ -77,6 +78,27 @@ body{
   border: 1px solid black;
   background-color: white;
 }
+
+
+.ButtonsGrid Button:hover{
+  border-radius: 12px;
+  font-size: 20px;
+  width: 100%;
+  height: 100%;
+  border: 1px solid black;
+  background-color: grey;
+}
+
+.ButtonsGrid Button:active{
+  border-radius: 12px;
+  font-size: 20px;
+  width: 100%;
+  height: 100%;
+  border: 1px solid black;
+  background-color: yellow;
+}
+
+
 
 .ClearRow{
   border-radius: 5px;

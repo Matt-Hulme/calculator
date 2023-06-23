@@ -33,11 +33,6 @@ export default function Calculator() {
     });
   };
   
-  
-  
-  
-  
-  
   const handleDecimal = () => {
     if (input === 0){
       setInput((prevInput) => prevInput + '.');
@@ -49,7 +44,6 @@ export default function Calculator() {
     }
   };
   
-
   const handleC = () => {
     setInput(0);
     setResult(0);
@@ -88,34 +82,36 @@ export default function Calculator() {
       });
   };
 
-  
-  
- 
-
   const handleAdd = () => {
     if (equation.length !== 0) {
       const lastCharacter = equation.slice(-1);
       const operator = lastCharacter === ' ' ? '+' : ' +';
       setEquation((prevEquation) => {
         const trimmedEquation = prevEquation.trimEnd();
-        return trimmedEquation + operator;
+        const newEquation = trimmedEquation + operator;
+        if (/[\d.]$/.test(trimmedEquation)) {
+          return newEquation;
+        }
+        return prevEquation;
       });
+      setInput(0);
     }
-    console.log(equation);
   };
-  
-  
-  
+
   const handleSubtract = () => {
     if (equation.length !== 0) {
       const lastCharacter = equation.slice(-1);
       const operator = lastCharacter === ' ' ? '-' : ' -';
       setEquation((prevEquation) => {
         const trimmedEquation = prevEquation.trimEnd();
-        return trimmedEquation + operator;
+        const newEquation = trimmedEquation + operator;
+        if (/[\d.]$/.test(trimmedEquation)) {
+          return newEquation;
+        }
+        return prevEquation;
       });
+      setInput(0);
     }
-    console.log(equation);
   };
   
   const handleMultiply = () => {
@@ -124,14 +120,15 @@ export default function Calculator() {
       const operator = lastCharacter === ' ' ? '*' : ' *';
       setEquation((prevEquation) => {
         const trimmedEquation = prevEquation.trimEnd();
-        return trimmedEquation + operator;
+        const newEquation = trimmedEquation + operator;
+        if (/[\d.]$/.test(trimmedEquation)) {
+          return newEquation;
+        }
+        return prevEquation;
       });
+      setInput(0);
     }
-    console.log(equation);
   };
-  
-  
-  
   
   const handleDivide = () => {
     if (equation.length !== 0) {
@@ -139,20 +136,18 @@ export default function Calculator() {
       const operator = lastCharacter === ' ' ? '/' : ' /';
       setEquation((prevEquation) => {
         const trimmedEquation = prevEquation.trimEnd();
-        return trimmedEquation + operator;
+        const newEquation = trimmedEquation + operator;
+        if (/[\d.]$/.test(trimmedEquation)) {
+          return newEquation;
+        }
+        return prevEquation;
       });
+      setInput(0);
     }
-    console.log(equation);
   };
-    
-    
-
 
   const handleNegate = () => {
-  
   };
-  
-  
 
   const handleEquals = () => {
   };
