@@ -8,7 +8,6 @@ export default function Calculator() {
   const [ equation, setEquation] = useState('');
   const [ history, setHistory] = useState([]);
 
-  
   const handleNumeric = (number) => {
     setInput((prevInput) => {
       let newInput;
@@ -50,7 +49,6 @@ export default function Calculator() {
     setEquation('');
   };
 
-
   const handleBackspace = () => {
     setInput((prevInput) => {
       const inputString = prevInput.toString();
@@ -58,7 +56,6 @@ export default function Calculator() {
       const newInput = newInputString ? parseFloat(newInputString) : 0;
       return newInput;
     });
-
     setEquation((prevEquation) => {
       const lastCharacter = prevEquation.slice(-1);
       let newEquation;
@@ -67,7 +64,6 @@ export default function Calculator() {
       } else {
         newEquation = prevEquation.slice(0, -1);
         }
-
         if (newEquation) {
           try {
             setResult(evaluate(newEquation));
@@ -77,7 +73,6 @@ export default function Calculator() {
         } else {
           setResult(0);
         }
-
         return newEquation;
       });
   };
