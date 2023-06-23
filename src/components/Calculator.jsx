@@ -17,12 +17,25 @@ export default function Calculator() {
       } else {
         newInput = parseFloat(prevInput.toString() + number.toString());
       }
-      const newEquation = equation + number;
-      setEquation(newEquation);
-      setResult(evaluate(newEquation));
       return newInput;
-    });  
+    });
+  
+    setEquation((prevEquation) => {
+      let newEquation;
+      if (/[^\d.]$/.test(prevEquation)) {
+        newEquation = prevEquation + ' ' + number;
+      } else {
+        const trimmedEquation = prevEquation.trimEnd();
+        newEquation = trimmedEquation + number;
+      }
+      setResult(evaluate(newEquation));
+      return newEquation;
+    });
   };
+  
+  
+  
+  
   
   
   const handleDecimal = () => {
@@ -45,88 +58,104 @@ export default function Calculator() {
 
 
   const handleBackspace = () => {
-  setInput((prevInput) => {
-    const inputString = prevInput.toString();
-    const newInputString = inputString.slice(0, -1);
-    const newInput = newInputString ? parseFloat(newInputString) : 0;
-    return newInput;
-  });
+    setInput((prevInput) => {
+      const inputString = prevInput.toString();
+      const newInputString = inputString.slice(0, -1);
+      const newInput = newInputString ? parseFloat(newInputString) : 0;
+      return newInput;
+    });
 
-  setEquation((prevEquation) => {
-    const lastCharacter = prevEquation.slice(-1);
-    let newEquation;
-    if (lastCharacter && /\W/.test(lastCharacter)) {
-      newEquation = prevEquation.slice(0, -2);
-    } else {
-      newEquation = prevEquation.slice(0, -1);
-    }
+    setEquation((prevEquation) => {
+      const lastCharacter = prevEquation.slice(-1);
+      let newEquation;
+      if (lastCharacter && /\W/.test(lastCharacter)) {
+        newEquation = prevEquation.slice(0, -2);
+      } else {
+        newEquation = prevEquation.slice(0, -1);
+        }
 
-    if (newEquation) {
-      try {
-        setResult(evaluate(newEquation));
-      } catch (error) {
-        setResult(0);
-      }
-    } else {
-      setResult(0);
-    }
+        if (newEquation) {
+          try {
+            setResult(evaluate(newEquation));
+          } catch (error) {
+            setResult(0);
+          }
+        } else {
+          setResult(0);
+        }
 
-    return newEquation;
-  });
-};
+        return newEquation;
+      });
+  };
 
   
   
-  const handleMultiply = () => {
-    if (equation.length == 0){
-    }
-    else if (!(equation.slice(-2).includes("*"))){
-      setInput(0);
-      setEquation((prevEquation) => prevEquation.concat(' * '));
-    }
-  };
-
-  const handleDivide = () => {
-    if (equation.length == 0){
-    }
-    else if (!(equation.slice(-2).includes("/"))){
-      setInput(0);
-      setEquation((prevEquation) => prevEquation.concat(' / '));
-    }
-  };
-
-  const handleSubtract = () => {
-    if (equation.length == 0){
-    }
-    else if (!(equation.slice(-2).includes("-"))){
-      setInput(0);
-      setEquation((prevEquation) => prevEquation.concat(' - '));
-      
-    }
-  };
+ 
 
   const handleAdd = () => {
-    if (equation.length == 0){
+    if (equation.length !== 0) {
+      const lastCharacter = equation.slice(-1);
+      const operator = lastCharacter === ' ' ? '+' : ' +';
+      setEquation((prevEquation) => {
+        const trimmedEquation = prevEquation.trimEnd();
+        return trimmedEquation + operator;
+      });
     }
-    else if (!(equation.slice(-2).includes("+"))){
-      setInput(0);
-      setEquation((prevEquation) => prevEquation.concat(' + '));
-      
-    }
+    console.log(equation);
   };
   
+  
+  
+  const handleSubtract = () => {
+    if (equation.length !== 0) {
+      const lastCharacter = equation.slice(-1);
+      const operator = lastCharacter === ' ' ? '-' : ' -';
+      setEquation((prevEquation) => {
+        const trimmedEquation = prevEquation.trimEnd();
+        return trimmedEquation + operator;
+      });
+    }
+    console.log(equation);
+  };
+  
+  const handleMultiply = () => {
+    if (equation.length !== 0) {
+      const lastCharacter = equation.slice(-1);
+      const operator = lastCharacter === ' ' ? '*' : ' *';
+      setEquation((prevEquation) => {
+        const trimmedEquation = prevEquation.trimEnd();
+        return trimmedEquation + operator;
+      });
+    }
+    console.log(equation);
+  };
+  
+  
+  
+  
+  const handleDivide = () => {
+    if (equation.length !== 0) {
+      const lastCharacter = equation.slice(-1);
+      const operator = lastCharacter === ' ' ? '/' : ' /';
+      setEquation((prevEquation) => {
+        const trimmedEquation = prevEquation.trimEnd();
+        return trimmedEquation + operator;
+      });
+    }
+    console.log(equation);
+  };
+    
+    
+
+
   const handleNegate = () => {
   
   };
   
   
-  
-
 
   const handleEquals = () => {
   };
-  
-  
   
 
   return (
