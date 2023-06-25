@@ -101,9 +101,8 @@ export default function Calculator() {
       const lastCharacter = equation.slice(-1);
       const operator = lastCharacter === ' ' ? '+' : ' +';
       setEquation((prevEquation) => {
-        const trimmedEquation = prevEquation.trimEnd();
-        const newEquation = trimmedEquation + operator;
-        if (/[\d.]$/.test(trimmedEquation)) {
+        const newEquation = prevEquation + operator;
+        if (/[\d.]$/.test(prevEquation)) {
           return newEquation;
         }
         return prevEquation;
@@ -117,9 +116,8 @@ export default function Calculator() {
       const lastCharacter = equation.slice(-1);
       const operator = lastCharacter === ' ' ? '-' : ' -';
       setEquation((prevEquation) => {
-        const trimmedEquation = prevEquation.trimEnd();
-        const newEquation = trimmedEquation + operator;
-        if (/[\d.]$/.test(trimmedEquation)) {
+        const newEquation = prevEquation + operator;
+        if (/[\d.]$/.test(prevEquation)) {
           return newEquation;
         }
         return prevEquation;
@@ -133,9 +131,8 @@ export default function Calculator() {
       const lastCharacter = equation.slice(-1);
       const operator = lastCharacter === ' ' ? '*' : ' *';
       setEquation((prevEquation) => {
-        const trimmedEquation = prevEquation.trimEnd();
-        const newEquation = trimmedEquation + operator;
-        if (/[\d.]$/.test(trimmedEquation)) {
+        const newEquation = prevEquation + operator;
+        if (/[\d.]$/.test(prevEquation)) {
           return newEquation;
         }
         return prevEquation;
@@ -149,9 +146,8 @@ export default function Calculator() {
       const lastCharacter = equation.slice(-1);
       const operator = lastCharacter === ' ' ? '/' : ' /';
       setEquation((prevEquation) => {
-        const trimmedEquation = prevEquation.trimEnd();
-        const newEquation = trimmedEquation + operator;
-        if (/[\d.]$/.test(trimmedEquation)) {
+        const newEquation = prevEquation + operator;
+        if (/[\d.]$/.test(prevEquation)) {
           return newEquation;
         }
         return prevEquation;
@@ -159,6 +155,31 @@ export default function Calculator() {
       setInput(0);
     }
   };
+
+  // const handleInverseX = () => {
+  //   if (equation.length !== 0){
+  //     const lastCharacter = equation.slice(0,-1);
+  //     setInput((prevInput) =>{});
+  //   }
+
+  const handleXSquared = () => {
+    setEquation((prevEquation) => {
+      const equationArray = prevEquation.split(' ');
+      const lastInputIndex = equationArray.length - 1;
+      const lastInput = equationArray[lastInputIndex];
+      let newEquation;
+      if (!isNaN(parseFloat(lastInput))) {
+        const newLastInput = (`${lastInput} ^ 2`);
+        equationArray[lastInputIndex] = newLastInput;
+        newEquation = equationArray.join(' ');
+        setResult(evaluate(newEquation));
+      } else {
+        newEquation = prevEquation;
+      }
+      return newEquation;
+    });
+  };
+
 
   const handleNegate = () => {
     setEquation((prevEquation) => {
@@ -179,7 +200,9 @@ export default function Calculator() {
     });
   };
   
-  
+
+    
+
   
 
   const handleEquals = () => {
@@ -201,9 +224,9 @@ export default function Calculator() {
         <Button label="(" onClick ={() => handleLParenth()}></Button>
         <Button label=")" onClick ={() => handleRParenth()}></Button>
         <Button label="Backspace" onClick={() => handleBackspace()}></Button>
-        <Button label="1/X" onClick={() => handleOneByX()}></Button>
-        <Button label="X^2" onClick={() => handleSquared()}></Button>
-        <Button label="2√X" onClick={() => handleRootX()}></Button>
+        <Button label="1/X" onClick={() => handleInverseX()}></Button>
+        <Button label="X^2" onClick={() => handleXSquared()}></Button>
+        <Button label="√X" onClick={() => handleRootX()}></Button>
         <Button label="/" onClick={() => handleDivide()}></Button>
         <Button label="7" onClick={() => handleNumeric(7)}></Button>
         <Button label="8" onClick={() => handleNumeric(8)}></Button>
