@@ -19,10 +19,15 @@ export default function Calculator() {
       return newInput;
     });
   
+    const lastCharacter = equation.trim().slice(-1);
     setEquation((prevEquation) => {
       let newEquation;
       if (/[^\d.]$/.test(prevEquation)) {
-        newEquation = prevEquation + ' ' + number;
+        if (lastCharacter === '%') {
+          newEquation = prevEquation + ' * ' + number;
+        } else {
+          newEquation = prevEquation + ` ${number}`;
+        }
       } else {
         const trimmedEquation = prevEquation.trimEnd();
         newEquation = trimmedEquation + number;
@@ -30,7 +35,8 @@ export default function Calculator() {
       setResult(evaluate(newEquation));
       return newEquation;
     });
-  };
+  }
+  
   
   const handleDecimal = () => {
     if (input === 0){
@@ -233,28 +239,28 @@ export default function Calculator() {
   };
 
 
-  // const handlePercentage = () => {
-  //   setEquation((prevEquation) => {
-  //     let newEquation = prevEquation.trim();
-  //     const lastCharacter = newEquation.slice(-1);
-  //     if (lastCharacter === '%') {
-  //       newEquation = newEquation.slice(0, -1);
-  //     } else if (/[^\d.]$/.test(newEquation)) {
-  //       newEquation += ' %';
-  //     } else {
-  //       const equationArray = newEquation.split(' ');
-  //       const lastInputIndex = equationArray.length - 1;
-  //       const lastInput = equationArray[lastInputIndex];
-  //       if (!isNaN(parseFloat(lastInput))) {
-  //         const newLastInput = `${lastInput}%`;
-  //         equationArray[lastInputIndex] = newLastInput;
-  //         newEquation = equationArray.join(' ');
-  //       }
-  //     }
-  //     setResult(evaluate(newEquation));
-  //     return newEquation;
-  //   });
-  // };
+  const handlePercentage = () => {
+    setEquation((prevEquation) => {
+      let newEquation = prevEquation.trim();
+      const lastCharacter = newEquation.slice(-1);
+      if (lastCharacter === '%') {
+        newEquation = newEquation.slice(0, -1);
+      } else if (/[^\d.]$/.test(newEquation)) {
+        newEquation += ' %';
+      } else {
+        const equationArray = newEquation.split(' ');
+        const lastInputIndex = equationArray.length - 1;
+        const lastInput = equationArray[lastInputIndex];
+        if (!isNaN(parseFloat(lastInput))) {
+          const newLastInput = `${lastInput}%`;
+          equationArray[lastInputIndex] = newLastInput;
+          newEquation = equationArray.join(' ');
+        }
+      }
+      setResult(evaluate(newEquation));
+      return newEquation;
+    });
+  };
   
 
     
