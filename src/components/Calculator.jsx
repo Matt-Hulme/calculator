@@ -18,12 +18,11 @@ export default function Calculator() {
       }
       return newInput;
     });
-  
     const lastCharacter = equation.trim().slice(-1);
     setEquation((prevEquation) => {
       let newEquation;
       if (/[^\d.]$/.test(prevEquation)) {
-        if (lastCharacter === '%') {
+        if (lastCharacter === '%' || ')') {
           newEquation = prevEquation + ' * ' + number;
         } else {
           newEquation = prevEquation + ` ${number}`;
@@ -188,7 +187,7 @@ export default function Calculator() {
       const lastInput = equationArray[lastInputIndex];
       let newEquation;
       if (!isNaN(parseFloat(lastInput))) {
-        const newLastInput = (`1/${lastInput}`);
+        const newLastInput = (`(1/${lastInput})`);
         equationArray[lastInputIndex] = newLastInput;
         newEquation = equationArray.join(' ');
         setResult(evaluate(newEquation));
