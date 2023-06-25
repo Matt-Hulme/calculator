@@ -156,11 +156,6 @@ export default function Calculator() {
     }
   };
 
-  // const handleInverseX = () => {
-  //   if (equation.length !== 0){
-  //     const lastCharacter = equation.slice(0,-1);
-  //     setInput((prevInput) =>{});
-  //   }
 
   const handleXSquared = () => {
     setEquation((prevEquation) => {
