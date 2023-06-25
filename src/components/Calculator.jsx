@@ -42,6 +42,25 @@ export default function Calculator() {
       setEquation((prevEquation) => prevEquation + '.')
     }
   };
+
+  // const handleLParenth = () => {
+  //   console.log("LParenthHit");
+  //   const lastCharacter = equation.slice(-1);
+  //   if (lastCharacter !== "(" && lastCharacter !==")"){
+  //     setInput((prevInput) => prevInput + "(");
+  //     setEquation((prevEquation) => prevEquation + "(");
+  //   }
+  // };
+  
+  // const handleRParenth = () =>{
+  //   console.log("RParenthHit");
+  //   const lastCharacter = equation.slice(-1);
+  //   if (lastCharacter !== "(" && lastCharacter !==")"){
+  //     setInput((prevInput) => prevInput + ")");
+  //     setEquation((prevEquation) => prevEquation + ")");
+  //   }
+  // };
+
   
   const handleC = () => {
     setInput(0);
@@ -142,7 +161,24 @@ export default function Calculator() {
   };
 
   const handleNegate = () => {
+    setEquation((prevEquation) => {
+      const equationArray = prevEquation.split(' ');
+      const lastInputIndex = equationArray.length - 1;
+      const lastInput = equationArray[lastInputIndex];
+      let newEquation;
+      if (!isNaN(parseFloat(lastInput))) {
+        const newLastInput = (-parseFloat(lastInput)).toString();
+        equationArray[lastInputIndex] = newLastInput;
+        newEquation = equationArray.join(' ');
+        setInput(-parseFloat(lastInput));
+      } else {
+        newEquation = prevEquation;
+      }
+      setResult(evaluate(newEquation));
+      return newEquation;
+    });
   };
+  
 
   const handleEquals = () => {
   };
@@ -160,8 +196,8 @@ export default function Calculator() {
       <div className ="ClearRow" onClick={() => handleC()}>Clear</div>
       <div className="ButtonsGrid">
         <Button label="%" onClick={() => handlePercentage()}></Button>
-        <Button label="("></Button>
-        <Button label=")"></Button>
+        <Button label="(" onClick ={() => handleLParenth()}></Button>
+        <Button label=")" onClick ={() => handleRParenth()}></Button>
         <Button label="Backspace" onClick={() => handleBackspace()}></Button>
         <Button label="1/X" onClick={() => handleOneByX()}></Button>
         <Button label="X^2" onClick={() => handleSquared()}></Button>
