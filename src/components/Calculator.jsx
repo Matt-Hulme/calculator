@@ -160,24 +160,32 @@ export default function Calculator() {
     }
   };
 
-  const handleNegate = () => {
-    setEquation((prevEquation) => {
-      const equationArray = prevEquation.split(' ');
-      const lastInputIndex = equationArray.length - 1;
-      const lastInput = equationArray[lastInputIndex];
-      let newEquation;
-      if (!isNaN(parseFloat(lastInput))) {
-        const newLastInput = (-parseFloat(lastInput)).toString();
-        equationArray[lastInputIndex] = newLastInput;
-        newEquation = equationArray.join(' ');
-        setInput(-parseFloat(lastInput));
-      } else {
-        newEquation = prevEquation;
-      }
-      setResult(evaluate(newEquation));
-      return newEquation;
-    });
-  };
+  // const handleNegate = () => {
+  //   const operators = ['+', '-', '*', '/'];
+  //   setEquation((prevEquation) => {
+  //     const equationArray = prevEquation.split(' ');
+  //     const lastInputIndex = equationArray.length - 1;
+  //     const lastInput = equationArray[lastInputIndex];
+  //     let newEquation;
+  //     if (
+  //       (!isNaN(parseFloat(lastInput)) || operators.includes(lastInput)) &&
+  //       equationArray.length > 1
+  //     ) {
+  //       const newLastInput = (-parseFloat(lastInput)).toString();
+  //       equationArray[lastInputIndex] = newLastInput;
+  //       newEquation = equationArray.join(' ');
+  //       setInput(-parseFloat(lastInput));
+  //     } else if (prevEquation !== '') {
+  //       newEquation = prevEquation.slice(0, -1);
+  //     } else {
+  //       newEquation = prevEquation;
+  //     }
+  //     setResult(evaluate(newEquation));
+  //     return newEquation;
+  //   });
+  // };
+  
+  
   
 
   const handleEquals = () => {
