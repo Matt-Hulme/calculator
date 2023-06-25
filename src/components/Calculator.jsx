@@ -22,7 +22,7 @@ export default function Calculator() {
     setEquation((prevEquation) => {
       let newEquation;
       if (/[^\d.]$/.test(prevEquation)) {
-        if (lastCharacter === '%' || ')') {
+        if (lastCharacter === '%' || lastCharacter === ')') {
           newEquation = prevEquation + ' * ' + number;
         } else {
           newEquation = prevEquation + ` ${number}`;
@@ -34,7 +34,8 @@ export default function Calculator() {
       setResult(evaluate(newEquation));
       return newEquation;
     });
-  }
+  };
+  
   
   
   const handleDecimal = () => {
@@ -49,23 +50,35 @@ export default function Calculator() {
   };
 
   // const handleLParenth = () => {
-  //   console.log("LParenthHit");
   //   const lastCharacter = equation.slice(-1);
-  //   if (lastCharacter !== "(" && lastCharacter !==")"){
-  //     setInput((prevInput) => prevInput + "(");
+  //   const operators = ["+", "-", "*", "/"];
+  //   const decimalRegex = /\d+\.\d*$/;
+  
+  //   if (
+  //     lastCharacter === "" ||
+  //     lastCharacter === "(" ||
+  //     operators.includes(lastCharacter) ||
+  //     decimalRegex.test(lastCharacter)
+  //   ) {
   //     setEquation((prevEquation) => prevEquation + "(");
   //   }
   // };
   
-  // const handleRParenth = () =>{
-  //   console.log("RParenthHit");
+  // const handleRParenth = () => {
   //   const lastCharacter = equation.slice(-1);
-  //   if (lastCharacter !== "(" && lastCharacter !==")"){
-  //     setInput((prevInput) => prevInput + ")");
+  //   const operators = ["+", "-", "*", "/"];
+  //   const decimalRegex = /\d+\.\d*$/;
+  
+  //   if (
+  //     lastCharacter !== "" &&
+  //     lastCharacter !== "(" &&
+  //     !operators.includes(lastCharacter) &&
+  //     !decimalRegex.test(lastCharacter)
+  //   ) {
   //     setEquation((prevEquation) => prevEquation + ")");
   //   }
   // };
-
+  
   
   const handleC = () => {
     setInput(0);
@@ -104,10 +117,10 @@ export default function Calculator() {
   const handleAdd = () => {
     if (equation.length !== 0) {
       const lastCharacter = equation.slice(-1);
-      const operator = lastCharacter === ' ' ? '+' : ' +';
+      const operator = lastCharacter === ' ' || lastCharacter === ')' ? '+' : ' +';
       setEquation((prevEquation) => {
-        const newEquation = prevEquation + operator;
-        if (/[\d.]$/.test(prevEquation)) {
+        const newEquation = prevEquation + ' ' + operator;
+        if (/[\d.)]$/.test(prevEquation)) {
           return newEquation;
         }
         return prevEquation;
@@ -115,14 +128,14 @@ export default function Calculator() {
       setInput(0);
     }
   };
-
+  
   const handleSubtract = () => {
     if (equation.length !== 0) {
       const lastCharacter = equation.slice(-1);
-      const operator = lastCharacter === ' ' ? '-' : ' -';
+      const operator = lastCharacter === ' ' || lastCharacter === ')' ? '-' : ' -';
       setEquation((prevEquation) => {
-        const newEquation = prevEquation + operator;
-        if (/[\d.]$/.test(prevEquation)) {
+        const newEquation = prevEquation + ' ' + operator;
+        if (/[\d.)]$/.test(prevEquation)) {
           return newEquation;
         }
         return prevEquation;
@@ -134,10 +147,10 @@ export default function Calculator() {
   const handleMultiply = () => {
     if (equation.length !== 0) {
       const lastCharacter = equation.slice(-1);
-      const operator = lastCharacter === ' ' ? '*' : ' *';
+      const operator = lastCharacter === ' ' || lastCharacter === ')' ? '*' : ' *';
       setEquation((prevEquation) => {
-        const newEquation = prevEquation + operator;
-        if (/[\d.]$/.test(prevEquation)) {
+        const newEquation = prevEquation + ' ' + operator;
+        if (/[\d.)]$/.test(prevEquation)) {
           return newEquation;
         }
         return prevEquation;
@@ -149,10 +162,10 @@ export default function Calculator() {
   const handleDivide = () => {
     if (equation.length !== 0) {
       const lastCharacter = equation.slice(-1);
-      const operator = lastCharacter === ' ' ? '/' : ' /';
+      const operator = lastCharacter === ' ' || lastCharacter === ')' ? '/' : ' /';
       setEquation((prevEquation) => {
-        const newEquation = prevEquation + operator;
-        if (/[\d.]$/.test(prevEquation)) {
+        const newEquation = prevEquation + ' ' + operator;
+        if (/[\d.)]$/.test(prevEquation)) {
           return newEquation;
         }
         return prevEquation;
@@ -160,6 +173,7 @@ export default function Calculator() {
       setInput(0);
     }
   };
+  
 
 
   const handleXSquared = () => {
@@ -169,7 +183,7 @@ export default function Calculator() {
       const lastInput = equationArray[lastInputIndex];
       let newEquation;
       if (!isNaN(parseFloat(lastInput))) {
-        const newLastInput = (`${lastInput} ^ 2`);
+        const newLastInput = (`(${lastInput} ^ 2)`);
         equationArray[lastInputIndex] = newLastInput;
         newEquation = equationArray.join(' ');
         setResult(evaluate(newEquation));
@@ -282,8 +296,8 @@ export default function Calculator() {
       <div className ="ClearRow" onClick={() => handleC()}>Clear</div>
       <div className="ButtonsGrid">
         <Button label="%" onClick={() => handlePercentage()}></Button>
-        <Button label="(" onClick ={() => handleLParenth()}></Button>
-        <Button label=")" onClick ={() => handleRParenth()}></Button>
+        <Button label="(" onClick = {() => handleLParenth()}></Button>
+        <Button label=")"onClick = {() => handleRParenth()}></Button>
         <Button label="Backspace" onClick={() => handleBackspace()}></Button>
         <Button label="1/X" onClick={() => handleInverseX()}></Button>
         <Button label="X^2" onClick={() => handleXSquared()}></Button>
