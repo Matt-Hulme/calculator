@@ -180,6 +180,43 @@ export default function Calculator() {
     });
   };
 
+  const handleInverseX = () => {
+    setEquation((prevEquation) => {
+      const equationArray = prevEquation.split(' ');
+      const lastInputIndex = equationArray.length - 1;
+      const lastInput = equationArray[lastInputIndex];
+      let newEquation;
+      if (!isNaN(parseFloat(lastInput))) {
+        const newLastInput = (`1/${lastInput}`);
+        equationArray[lastInputIndex] = newLastInput;
+        newEquation = equationArray.join(' ');
+        setResult(evaluate(newEquation));
+      } else {
+        newEquation = prevEquation;
+      }
+      return newEquation;
+    });
+  };
+
+
+  // const handleRootX = () => {
+  //   setEquation((prevEquation) => {
+  //     const equationArray = prevEquation.split(' ');
+  //     const lastInputIndex = equationArray.length - 1;
+  //     const lastInput = equationArray[lastInputIndex];
+  //     let newEquation;
+  //     if (!isNaN(parseFloat(lastInput))) {
+  //       const newLastInput = Math.sqrt(parseFloat(lastInput)).toString();
+  //       equationArray[lastInputIndex] = newLastInput;
+  //       newEquation = equationArray.join(' ');
+  //       setResult(evaluate(newEquation));
+  //     } else {
+  //       newEquation = prevEquation;
+  //     }
+  //     return newEquation;
+  //   });
+  // };
+
 
   const handleNegate = () => {
     setEquation((prevEquation) => {
@@ -199,6 +236,30 @@ export default function Calculator() {
       return newEquation;
     });
   };
+
+
+  // const handlePercentage = () => {
+  //   setEquation((prevEquation) => {
+  //     let newEquation = prevEquation.trim();
+  //     const lastCharacter = newEquation.slice(-1);
+  //     if (lastCharacter === '%') {
+  //       newEquation = newEquation.slice(0, -1);
+  //     } else if (/[^\d.]$/.test(newEquation)) {
+  //       newEquation += ' %';
+  //     } else {
+  //       const equationArray = newEquation.split(' ');
+  //       const lastInputIndex = equationArray.length - 1;
+  //       const lastInput = equationArray[lastInputIndex];
+  //       if (!isNaN(parseFloat(lastInput))) {
+  //         const newLastInput = `${lastInput}%`;
+  //         equationArray[lastInputIndex] = newLastInput;
+  //         newEquation = equationArray.join(' ');
+  //       }
+  //     }
+  //     setResult(evaluate(newEquation));
+  //     return newEquation;
+  //   });
+  // };
   
 
     
