@@ -19,26 +19,28 @@ export default function Calculator() {
       } else {
         newInput = prevInput.toString() + number.toString();
       }
-      return parseFloat(newInput); // Parse the input as a float to remove leading zeros
+      return parseFloat(newInput);
     });
   
     setEquation((prevEquation) => {
       let newEquation;
-      const lastCharacter = prevEquation.trim().slice(-1);
+      const lastCharacter = prevEquation.toString().trim().slice(-1);
       if (
         lastCharacter === '%' ||
         lastCharacter === ')' ||
         (lastCharacter === '.' && /[^\d.)]$/.test(prevEquation))
       ) {
-        newEquation = prevEquation + ' * ' + number;
+        newEquation = prevEquation + ' + ' + number;
       } else if (lastCharacter === '(' && number === '.') {
         newEquation = prevEquation + '0.';
       } else if (lastCharacter === '(') {
         newEquation = prevEquation + number;
-      } else if (/\d$|\.$/.test(prevEquation)) {
-        newEquation = prevEquation + number;
-      } else {
+      } else if (prevEquation === '0' && number !== 0) {
+        newEquation = number.toString();
+      } else if (/(\d+)\s*[\+\-\*\/]$/.test(prevEquation)) {
         newEquation = prevEquation + ' ' + number;
+      } else {
+        newEquation = prevEquation + number;
       }
   
       try {
@@ -50,6 +52,14 @@ export default function Calculator() {
       return newEquation;
     });
   };
+  
+  
+  
+  
+  
+  
+  
+  
   
   
   
