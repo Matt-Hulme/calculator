@@ -11,17 +11,15 @@ export default function Calculator() {
 
   const handleNumeric = (number) => {
     setInput((prevInput) => {
-      if (prevInput === 0 && number === 0) {
-        return prevInput;
-      }
-  
       let newInput;
-      if (prevInput === 0 || (!prevInput.toString().includes('.') && number !== 0)) {
+      if (prevInput === 0 && number === 0) {
+        newInput = prevInput;
+      } else if (prevInput === 0 || (!prevInput.toString().includes('.') && number !== 0)) {
         newInput = number.toString();
       } else {
         newInput = prevInput.toString() + number.toString();
       }
-      return newInput;
+      return parseFloat(newInput); // Parse the input as a float to remove leading zeros
     });
   
     setEquation((prevEquation) => {
@@ -52,6 +50,7 @@ export default function Calculator() {
       return newEquation;
     });
   };
+  
   
   
   
