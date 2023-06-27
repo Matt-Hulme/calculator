@@ -28,22 +28,12 @@ export default function Calculator() {
         /[^\d.)]$/.test(prevEquation)
       ) {
         newEquation = prevEquation + ' * ' + number;
-      } else if (
-        lastCharacter === '(' ||
-        (lastCharacter === '0' && !prevEquation.includes('.')) ||
-        lastCharacter === '.'
-      ) {
-        newEquation = prevEquation.slice(0, -1) + '*' + number;
+      } else if (lastCharacter === '(') {
+        newEquation = prevEquation + number;
+      } else if (/\d$|\.$/.test(prevEquation)) {
+        newEquation = prevEquation + number;
       } else {
-        newEquation = prevEquation;
-        if (prevEquation !== '0' && !isNaN(parseFloat(lastCharacter))) {
-          newEquation += number;
-        } else {
-          if (prevEquation !== '0') {
-            newEquation += ' ';
-          }
-          newEquation += number;
-        }
+        newEquation = prevEquation + ' ' + number;
       }
   
       try {
@@ -55,6 +45,11 @@ export default function Calculator() {
       return newEquation;
     });
   };
+  
+  
+  
+  
+  
       
   const handleDecimal = () => {
     if (input === 0){
@@ -71,25 +66,19 @@ export default function Calculator() {
     const operators = ["+", "-", "*"];
     const lastCharacter = equation.trim().slice(-1);
   
-    if (!isNaN(parseFloat(lastCharacter))|| (lastCharacter === '%' || lastCharacter === ')')) {
+    if (!isNaN(parseFloat(lastCharacter)) || lastCharacter === ")" || lastCharacter === "%") {
       setEquation((prevEquation) => prevEquation + " * (");
-      setParenthCount((prevParenthCount) => prevParenthCount + 1);
+      setParenthCount((prevParenthCount) => prevParenthCount - 1);
     } else if (operators.includes(lastCharacter)) {
       setEquation((prevEquation) => prevEquation + " (");
-      setParenthCount((prevParenthCount) => prevParenthCount + 1);
+      setParenthCount((prevParenthCount) => prevParenthCount - 1);
     } else {
       setEquation((prevEquation) => prevEquation + "(");
-      setParenthCount((prevParenthCount) => prevParenthCount + 1);
+      setParenthCount((prevParenthCount) => prevParenthCount - 1);
     }
   };
   
-  
-  
-  
-
-  
-  
-  
+    
   const handleRParenth = () => {
     const operators = ["+", "-", "*", "/"];
     const lastCharacter = equation.slice(-1);
