@@ -45,12 +45,8 @@ export default function Calculator() {
       return newEquation;
     });
   };
-  
-  
-  
-  
-  
-      
+
+
   const handleDecimal = () => {
     if (input === 0){
       setInput((prevInput) => prevInput + '.');
@@ -78,7 +74,6 @@ export default function Calculator() {
     }
   };
   
-    
   const handleRParenth = () => {
     const operators = ["+", "-", "*", "/"];
     const lastCharacter = equation.slice(-1);
@@ -107,15 +102,14 @@ export default function Calculator() {
     }
   };
   
-  
-  
-  
+
   const handleC = () => {
     setInput(0);
     setResult(0);
     setEquation('');
     setParenthCount(0);
   };
+
 
   const handleBackspace = () => {
     setInput((prevInput) => {
@@ -145,6 +139,7 @@ export default function Calculator() {
       });
   };
 
+
   const handleAdd = () => {
     if (equation.length !== 0) {
       const lastCharacter = equation.slice(-1);
@@ -159,6 +154,7 @@ export default function Calculator() {
       setInput(0);
     }
   };
+ 
   
   const handleSubtract = () => {
     if (equation.length !== 0) {
@@ -175,6 +171,7 @@ export default function Calculator() {
     }
   };
   
+
   const handleMultiply = () => {
     if (equation.length !== 0) {
       const lastCharacter = equation.slice(-1);
@@ -190,6 +187,7 @@ export default function Calculator() {
     }
   };
   
+
   const handleDivide = () => {
     if (equation.length !== 0) {
       const lastCharacter = equation.slice(-1);
@@ -204,7 +202,6 @@ export default function Calculator() {
       setInput(0);
     }
   };
-  
 
 
   const handleXSquared = () => {
@@ -224,6 +221,7 @@ export default function Calculator() {
       return newEquation;
     });
   };
+
 
   const handleInverseX = () => {
     setEquation((prevEquation) => {
@@ -262,8 +260,6 @@ export default function Calculator() {
       return newEquation;
     });
   };
-  
-  
 
 
   const handleNegate = () => {
@@ -308,16 +304,12 @@ export default function Calculator() {
       return newEquation;
     });
   };
-  
 
-    
-
-  
 
   const handleEquals = () => {
   };
   
-
+  
   return (
     <div className="Calculator">
       Calculator
