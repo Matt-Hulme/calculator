@@ -12,13 +12,15 @@ export default function Calculator() {
   const handleNumeric = (number) => {
     setInput((prevInput) => {
       let newInput;
+  
       if (prevInput === 0 && number === 0) {
         newInput = prevInput;
       } else if (prevInput === 0 || (!prevInput.toString().includes('.') && number !== 0)) {
         newInput = number.toString();
       } else {
-        newInput = prevInput.toString() + number.toString();
+        newInput = prevInput.toString().replace(/^0+/, '') + number.toString();
       }
+  
       return parseFloat(newInput);
     });
   
@@ -48,33 +50,12 @@ export default function Calculator() {
       } catch (error) {
         setResult(0);
       }
-  
-      return newEquation;
+      return prevInput === 0 ? prevEquation : newEquation;
     });
   };
   
   
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-
+ 
 
   const handleDecimal = () => {
     if (input === 0){
@@ -354,8 +335,8 @@ export default function Calculator() {
       <div className ="ClearRow" onClick={() => handleC()}>Clear</div>
       <div className="ButtonsGrid">
         <Button label="%" onClick={() => handlePercentage()}></Button>
-        <Button label="(" onClick = {() => handleLParenth()}></Button>
-        <Button label=")"onClick = {() => handleRParenth()}></Button>
+        <Button label="(" onClick ={() => handleLParenth()}></Button>
+        <Button label=")"onClick ={() => handleRParenth()}></Button>
         <Button label="Backspace" onClick={() => handleBackspace()}></Button>
         <Button label="1/X" onClick={() => handleInverseX()}></Button>
         <Button label="X^2" onClick={() => handleXSquared()}></Button>
