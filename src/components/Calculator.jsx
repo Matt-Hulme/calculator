@@ -6,6 +6,7 @@ export default function Calculator() {
   const [ input, setInput] = useState(0);
   const [ result, setResult] = useState(0);
   const [ equation, setEquation] = useState('');
+  const [ parenthCount, setParenthCount] = useState(0)
   const [ history, setHistory] = useState([]);
 
   const handleNumeric = (number) => {
@@ -18,66 +19,88 @@ export default function Calculator() {
       }
       return newInput;
     });
-    const lastCharacter = equation.trim().slice(-1);
+  
     setEquation((prevEquation) => {
       let newEquation;
-      if (/[^\d.]$/.test(prevEquation)) {
-        if (lastCharacter === '%' || lastCharacter === ')') {
-          newEquation = prevEquation + ' * ' + number;
-        } else {
-          newEquation = prevEquation + ` ${number}`;
-        }
+      const lastCharacter = prevEquation.trim().slice(-1);
+      if (
+        lastCharacter === ')' ||
+        (/[^\d.)]$/.test(prevEquation) && !['(', ')'].includes(lastCharacter)) ||
+        (input.toString().trim() === '0' && number === 0)
+      ) {
+        newEquation = prevEquation + ' * ' + number;
       } else {
         const trimmedEquation = prevEquation.trimEnd();
         newEquation = trimmedEquation + number;
       }
-      setResult(evaluate(newEquation));
+      try {
+        setResult(evaluate(newEquation));
+      } catch (error) {
+        setResult(0);
+      }
       return newEquation;
     });
   };
   
   
   
+  
+
+  
+  
+  
+  
+  
+  
+  
   const handleDecimal = () => {
     if (input === 0){
       setInput((prevInput) => prevInput + '.');
-      setEquation((prevEquation) => prevEquation + '0.')
+      setEquation((prevEquation) => prevEquation + '0.');
     }
     else if (Number.isInteger(input)) {
       setInput((prevInput) => prevInput + '.');
-      setEquation((prevEquation) => prevEquation + '.')
+      setEquation((prevEquation) => prevEquation + '.');
     }
   };
 
-  // const handleLParenth = () => {
-  //   const lastCharacter = equation.slice(-1);
-  //   const operators = ["+", "-", "*", "/"];
-  //   const decimalRegex = /\d+\.\d*$/;
+  const handleLParenth = () => {
+    const operators = ["+", "-", "*"];
+    const lastCharacter = equation.slice(-1);
+    if (operators.includes(lastCharacter)){
+      setEquation ((prevEquation) => prevEquation + " (");
+      setParenthCount((prevParenthCount) => prevParenthCount + -1);
+    } else if (!isNaN(parseFloat(lastCharacter)) || lastCharacter == '%'){
+      setEquation ((prevEquation) => prevEquation + " * (");
+      setParenthCount((prevParenthCount) => prevParenthCount + -1);
+    } else {
+      setEquation ((prevEquation) => prevEquation + "(");
+      setParenthCount((prevParenthCount) => prevParenthCount + -1);
+    }
+  }
   
-  //   if (
-  //     lastCharacter === "" ||
-  //     lastCharacter === "(" ||
-  //     operators.includes(lastCharacter) ||
-  //     decimalRegex.test(lastCharacter)
-  //   ) {
-  //     setEquation((prevEquation) => prevEquation + "(");
-  //   }
-  // };
+  const handleRParenth = () => {
+    const operators = ["+", "-", "*", "/"];
+    const lastCharacter = equation.slice(-1);
+    
+    if (lastCharacter ==="("){
+      return;
+    }
+    
+    if (parenthCount < 0 && !operators.includes(lastCharacter) && lastCharacter !== "(") {
+      setEquation((prevEquation) => {
+        const newEquation = prevEquation + ")";
+        if (parenthCount == 0){
+          setResult(evaluate(newEquation));
+        }
+        return newEquation;
+      });
+      setParenthCount((prevParenthCount) => prevParenthCount + 1);
+    } else {
+      return;
+    }
+  };
   
-  // const handleRParenth = () => {
-  //   const lastCharacter = equation.slice(-1);
-  //   const operators = ["+", "-", "*", "/"];
-  //   const decimalRegex = /\d+\.\d*$/;
-  
-  //   if (
-  //     lastCharacter !== "" &&
-  //     lastCharacter !== "(" &&
-  //     !operators.includes(lastCharacter) &&
-  //     !decimalRegex.test(lastCharacter)
-  //   ) {
-  //     setEquation((prevEquation) => prevEquation + ")");
-  //   }
-  // };
   
   
   const handleC = () => {
@@ -213,23 +236,26 @@ export default function Calculator() {
   };
 
 
-  // const handleRootX = () => {
-  //   setEquation((prevEquation) => {
-  //     const equationArray = prevEquation.split(' ');
-  //     const lastInputIndex = equationArray.length - 1;
-  //     const lastInput = equationArray[lastInputIndex];
-  //     let newEquation;
-  //     if (!isNaN(parseFloat(lastInput))) {
-  //       const newLastInput = Math.sqrt(parseFloat(lastInput)).toString();
-  //       equationArray[lastInputIndex] = newLastInput;
-  //       newEquation = equationArray.join(' ');
-  //       setResult(evaluate(newEquation));
-  //     } else {
-  //       newEquation = prevEquation;
-  //     }
-  //     return newEquation;
-  //   });
-  // };
+  const handleRootX = () => {
+    setEquation((prevEquation) => {
+      const equationArray = prevEquation.split(' ');
+      const lastInputIndex = equationArray.length - 1;
+      const lastInput = equationArray[lastInputIndex];
+      let newEquation;
+      if (!isNaN(parseFloat(lastInput))) {
+        const newLastInput = `sqrt(${lastInput})`;
+        equationArray[lastInputIndex] = newLastInput;
+        newEquation = equationArray.join(' ');
+        setResult(evaluate(newEquation));
+        setEquation(newEquation);
+      } else {
+        newEquation = prevEquation;
+      }
+      return newEquation;
+    });
+  };
+  
+  
 
 
   const handleNegate = () => {
