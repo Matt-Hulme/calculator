@@ -24,35 +24,38 @@ export default function Calculator() {
       let newEquation;
       const lastCharacter = prevEquation.trim().slice(-1);
       if (
-        lastCharacter === ')' ||
-        (/[^\d.)]$/.test(prevEquation) && !['(', ')'].includes(lastCharacter)) ||
-        (input.toString().trim() === '0' && number === 0)
+        (lastCharacter === '%' || lastCharacter === ')') &&
+        /[^\d.)]$/.test(prevEquation)
       ) {
         newEquation = prevEquation + ' * ' + number;
+      } else if (
+        lastCharacter === '(' ||
+        (lastCharacter === '0' && !prevEquation.includes('.')) ||
+        lastCharacter === '.'
+      ) {
+        newEquation = prevEquation.slice(0, -1) + '*' + number;
       } else {
-        const trimmedEquation = prevEquation.trimEnd();
-        newEquation = trimmedEquation + number;
+        newEquation = prevEquation;
+        if (prevEquation !== '0' && !isNaN(parseFloat(lastCharacter))) {
+          newEquation += number;
+        } else {
+          if (prevEquation !== '0') {
+            newEquation += ' ';
+          }
+          newEquation += number;
+        }
       }
+  
       try {
         setResult(evaluate(newEquation));
       } catch (error) {
         setResult(0);
       }
+  
       return newEquation;
     });
   };
-  
-  
-  
-  
-
-  
-  
-  
-  
-  
-  
-  
+      
   const handleDecimal = () => {
     if (input === 0){
       setInput((prevInput) => prevInput + '.');
@@ -66,32 +69,46 @@ export default function Calculator() {
 
   const handleLParenth = () => {
     const operators = ["+", "-", "*"];
-    const lastCharacter = equation.slice(-1);
-    if (operators.includes(lastCharacter)){
-      setEquation ((prevEquation) => prevEquation + " (");
-      setParenthCount((prevParenthCount) => prevParenthCount + -1);
-    } else if (!isNaN(parseFloat(lastCharacter)) || lastCharacter == '%'){
-      setEquation ((prevEquation) => prevEquation + " * (");
-      setParenthCount((prevParenthCount) => prevParenthCount + -1);
+    const lastCharacter = equation.trim().slice(-1);
+  
+    if (!isNaN(parseFloat(lastCharacter))|| (lastCharacter === '%' || lastCharacter === ')')) {
+      setEquation((prevEquation) => prevEquation + " * (");
+      setParenthCount((prevParenthCount) => prevParenthCount + 1);
+    } else if (operators.includes(lastCharacter)) {
+      setEquation((prevEquation) => prevEquation + " (");
+      setParenthCount((prevParenthCount) => prevParenthCount + 1);
     } else {
-      setEquation ((prevEquation) => prevEquation + "(");
-      setParenthCount((prevParenthCount) => prevParenthCount + -1);
+      setEquation((prevEquation) => prevEquation + "(");
+      setParenthCount((prevParenthCount) => prevParenthCount + 1);
     }
-  }
+  };
+  
+  
+  
+  
+
+  
+  
   
   const handleRParenth = () => {
     const operators = ["+", "-", "*", "/"];
     const lastCharacter = equation.slice(-1);
-    
-    if (lastCharacter ==="("){
+  
+    if (lastCharacter === "(") {
       return;
     }
-    
-    if (parenthCount < 0 && !operators.includes(lastCharacter) && lastCharacter !== "(") {
+  
+    if (
+      parenthCount < 0 &&
+      !operators.includes(lastCharacter) &&
+      lastCharacter !== "("
+    ) {
       setEquation((prevEquation) => {
         const newEquation = prevEquation + ")";
-        if (parenthCount == 0){
+        try{
           setResult(evaluate(newEquation));
+        } catch (error){
+          setResult(input);
         }
         return newEquation;
       });
@@ -103,10 +120,12 @@ export default function Calculator() {
   
   
   
+  
   const handleC = () => {
     setInput(0);
     setResult(0);
     setEquation('');
+    setParenthCount(0);
   };
 
   const handleBackspace = () => {
