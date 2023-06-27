@@ -3,19 +3,23 @@ import Button from './Button.jsx';
 import { evaluate } from 'mathjs';
 
 export default function Calculator() {
-  const [ input, setInput] = useState(0);
-  const [ result, setResult] = useState(0);
+  const [input, setInput] = useState(0);
+  const [result, setResult] = useState(0);
   const [ equation, setEquation] = useState('');
   const [ parenthCount, setParenthCount] = useState(0)
   const [ history, setHistory] = useState([]);
 
   const handleNumeric = (number) => {
     setInput((prevInput) => {
+      if (prevInput === 0 && number === 0) {
+        return prevInput;
+      }
+  
       let newInput;
-      if (prevInput === 0 || !prevInput.toString().includes('.')) {
-        newInput = prevInput * 10 + number;
+      if (prevInput === 0 || (!prevInput.toString().includes('.') && number !== 0)) {
+        newInput = number.toString();
       } else {
-        newInput = parseFloat(prevInput.toString() + number.toString());
+        newInput = prevInput.toString() + number.toString();
       }
       return newInput;
     });
@@ -24,10 +28,13 @@ export default function Calculator() {
       let newEquation;
       const lastCharacter = prevEquation.trim().slice(-1);
       if (
-        (lastCharacter === '%' || lastCharacter === ')') &&
-        /[^\d.)]$/.test(prevEquation)
+        lastCharacter === '%' ||
+        lastCharacter === ')' ||
+        (lastCharacter === '.' && /[^\d.)]$/.test(prevEquation))
       ) {
         newEquation = prevEquation + ' * ' + number;
+      } else if (lastCharacter === '(' && number === '.') {
+        newEquation = prevEquation + '0.';
       } else if (lastCharacter === '(') {
         newEquation = prevEquation + number;
       } else if (/\d$|\.$/.test(prevEquation)) {
@@ -45,6 +52,19 @@ export default function Calculator() {
       return newEquation;
     });
   };
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
 
 
   const handleDecimal = () => {
@@ -65,14 +85,17 @@ export default function Calculator() {
     if (!isNaN(parseFloat(lastCharacter)) || lastCharacter === ")" || lastCharacter === "%") {
       setEquation((prevEquation) => prevEquation + " * (");
       setParenthCount((prevParenthCount) => prevParenthCount - 1);
-    } else if (operators.includes(lastCharacter)) {
-      setEquation((prevEquation) => prevEquation + " (");
+    } else if (operators.includes(lastCharacter) || lastCharacter === ".") {
+      setEquation((prevEquation) => prevEquation + " * (");
       setParenthCount((prevParenthCount) => prevParenthCount - 1);
     } else {
       setEquation((prevEquation) => prevEquation + "(");
       setParenthCount((prevParenthCount) => prevParenthCount - 1);
     }
   };
+  
+  
+  
   
   const handleRParenth = () => {
     const operators = ["+", "-", "*", "/"];
