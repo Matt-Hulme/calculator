@@ -3,6 +3,7 @@ import Button from './Button.jsx';
 import { evaluate } from 'mathjs';
 
 export default function Calculator() {
+  
   const [input, setInput] = useState(0);
   const [result, setResult] = useState(0);
   const [ equation, setEquation] = useState('');
@@ -12,99 +13,93 @@ export default function Calculator() {
   const handleNumeric = (number) => {
     setInput((prevInput) => {
       let newInput;
-  
-      if (prevInput === 0 && number === 0) {
-        newInput = prevInput;
-      } else if (prevInput === 0 || (!prevInput.toString().includes('.') && number !== 0)) {
-        newInput = number.toString();
+      if (prevInput === 0 || !prevInput.toString().includes('.')) {
+        newInput = prevInput * 10 + number;
       } else {
-        newInput = prevInput.toString().replace(/^0+/, '') + number.toString();
+        newInput = parseFloat(prevInput.toString() + number.toString());
       }
-  
-      return parseFloat(newInput);
+      return newInput;
     });
   
     setEquation((prevEquation) => {
       let newEquation;
-      const lastCharacter = prevEquation.toString().trim().slice(-1);
-      if (
-        lastCharacter === '%' ||
-        lastCharacter === ')' ||
-        (lastCharacter === '.' && /[^\d.)]$/.test(prevEquation))
-      ) {
-        newEquation = prevEquation + ' + ' + number;
-      } else if (lastCharacter === '(' && number === '.') {
-        newEquation = prevEquation + '0.';
-      } else if (lastCharacter === '(') {
+      const lastCharacter = prevEquation.trim().slice(-1);
+      if (lastCharacter === ')' || lastCharacter === "%"){
+        newEquation = prevEquation + ' * ' + number;
+      }else if(lastCharacter === '('){
         newEquation = prevEquation + number;
-      } else if (prevEquation === '0' && number !== 0) {
-        newEquation = number.toString();
-      } else if (/(\d+)\s*[\+\-\*\/]$/.test(prevEquation)) {
-        newEquation = prevEquation + ' ' + number;
-      } else {
-        newEquation = prevEquation + number;
+      }else if(!isNaN(parseInt(lastCharacter, 10)) || lastCharacter === "."){
+        newEquation = prevEquation + number
+      }else {
+        newEquation = prevEquation + ' '+ number;
       }
-  
       try {
         setResult(evaluate(newEquation));
       } catch (error) {
         setResult(0);
       }
-      return prevInput === 0 ? prevEquation : newEquation;
+      return newEquation;
     });
   };
+  
+  
   
   
  
 
   const handleDecimal = () => {
-    if (input === 0){
-      setInput((prevInput) => prevInput + '.');
-      setEquation((prevEquation) => prevEquation + '0.');
-    }
-    else if (Number.isInteger(input)) {
+    const operators = ['+', '-', '*', '/', '('];
+    const lastCharacter = equation.trim().slice(-1);
+    if (/[\d.]/.test(lastCharacter) && !input.toString().includes('.')) {
       setInput((prevInput) => prevInput + '.');
       setEquation((prevEquation) => prevEquation + '.');
+    } else if (operators.includes(lastCharacter) || lastCharacter ==""){
+      setInput((prevInput) => prevInput + '0.');
+      setEquation((prevEquation) => prevEquation + '0.');
+    } else if (lastCharacter ==")"){
+      setInput((prevInput) => prevInput + '* 0.');
+      setEquation((prevEquation) => prevEquation + '* 0.');
+    }
+  };
+  
+
+  const handleLParenth = () => {
+    const operators = ['+', '-', '*'];
+    const lastCharacter = equation.trim().slice(-1);
+
+    if (!isNaN(parseFloat(lastCharacter)) || lastCharacter === ')' || lastCharacter === '%') {
+      setEquation((prevEquation) => prevEquation + ' * (');
+      setParenthCount((prevParenthCount) => prevParenthCount - 1);
+    } else if (lastCharacter === '.') {
+      setEquation((prevEquation) => prevEquation + ' * (');
+      setParenthCount((prevParenthCount) => prevParenthCount - 1);
+    } else if(operators.includes(lastCharacter)){
+      setEquation((prevEquation) => prevEquation + ' (');
+      setParenthCount((prevParenthCount) => prevParenthCount - 1);
+    } else {
+      setEquation((prevEquation) => prevEquation + '(');
+      setParenthCount((prevParenthCount) => prevParenthCount - 1);
     }
   };
 
-  const handleLParenth = () => {
-    const operators = ["+", "-", "*"];
-    const lastCharacter = equation.trim().slice(-1);
-  
-    if (!isNaN(parseFloat(lastCharacter)) || lastCharacter === ")" || lastCharacter === "%") {
-      setEquation((prevEquation) => prevEquation + " * (");
-      setParenthCount((prevParenthCount) => prevParenthCount - 1);
-    } else if (operators.includes(lastCharacter) || lastCharacter === ".") {
-      setEquation((prevEquation) => prevEquation + " * (");
-      setParenthCount((prevParenthCount) => prevParenthCount - 1);
-    } else {
-      setEquation((prevEquation) => prevEquation + "(");
-      setParenthCount((prevParenthCount) => prevParenthCount - 1);
-    }
-  };
-  
-  
-  
-  
   const handleRParenth = () => {
-    const operators = ["+", "-", "*", "/"];
+    const operators = ['+', '-', '*', '/'];
     const lastCharacter = equation.slice(-1);
-  
-    if (lastCharacter === "(") {
+
+    if (lastCharacter === '(') {
       return;
     }
-  
+
     if (
       parenthCount < 0 &&
       !operators.includes(lastCharacter) &&
-      lastCharacter !== "("
+      lastCharacter !== '('
     ) {
       setEquation((prevEquation) => {
-        const newEquation = prevEquation + ")";
-        try{
+        const newEquation = prevEquation + ')';
+        try {
           setResult(evaluate(newEquation));
-        } catch (error){
+        } catch (error) {
           setResult(input);
         }
         return newEquation;
@@ -155,10 +150,8 @@ export default function Calculator() {
 
   const handleAdd = () => {
     if (equation.length !== 0) {
-      const lastCharacter = equation.slice(-1);
-      const operator = lastCharacter === ' ' || lastCharacter === ')' ? '+' : ' +';
       setEquation((prevEquation) => {
-        const newEquation = prevEquation + ' ' + operator;
+        const newEquation = prevEquation + ' +';
         if (/[\d.)]$/.test(prevEquation)) {
           return newEquation;
         }
