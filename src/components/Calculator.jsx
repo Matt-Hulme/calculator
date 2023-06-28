@@ -11,6 +11,7 @@ export default function Calculator() {
   const [ history, setHistory] = useState([]);
 
   const handleNumeric = (number) => {
+
     const equationArray = equation.split(' ');
     const lastInputIndex = equationArray.length - 1;
     const lastInput = equationArray[lastInputIndex];
@@ -57,17 +58,18 @@ export default function Calculator() {
     if (/[\d.]/.test(lastCharacter) && !input.toString().includes('.')) {
       setInput((prevInput) => prevInput + '.');
       setEquation((prevEquation) => prevEquation + '.');
-    } else if (operators.includes(lastCharacter) || lastCharacter ==""){
+    } else if (operators.includes(lastCharacter) || lastCharacter === ""){
       setInput((prevInput) => prevInput + ' 0.');
       setEquation((prevEquation) => prevEquation + ' 0.');
     } else if(lastCharacter === "("){
       setInput((prevInput) => prevInput + '0.');
       setEquation((prevEquation) => prevEquation + '0.');
-    } else if (lastCharacter ==")"){
+    } else if (lastCharacter === ")") {
       setInput((prevInput) => prevInput + '* 0.');
       setEquation((prevEquation) => prevEquation + '* 0.');
     }
   };
+  
   
   const handleLParenth = () => {
     const operators = ['+', '-', '*'];
