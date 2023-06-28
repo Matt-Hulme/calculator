@@ -43,7 +43,7 @@ export default function Calculator() {
       } else {
         newEquation = prevEquation + ' ' + number;
       }
-      if (parenthCount < 0){
+      if (parenthCount > 0){
           setResult("Close Parentheses");
         } else{
           setResult(evaluate(newEquation));
@@ -77,16 +77,16 @@ export default function Calculator() {
 
     if (!isNaN(parseFloat(lastCharacter)) || lastCharacter === ')' || lastCharacter === '%') {
       setEquation((prevEquation) => prevEquation + ' * (');
-      setParenthCount((prevParenthCount) => prevParenthCount - 1);
+      setParenthCount((prevParenthCount) => prevParenthCount + 1);
     } else if (lastCharacter === '.') {
       setEquation((prevEquation) => prevEquation + ' * (');
-      setParenthCount((prevParenthCount) => prevParenthCount - 1);
+      setParenthCount((prevParenthCount) => prevParenthCount + 1);
     } else if(operators.includes(lastCharacter)){
       setEquation((prevEquation) => prevEquation + ' (');
-      setParenthCount((prevParenthCount) => prevParenthCount - 1);
+      setParenthCount((prevParenthCount) => prevParenthCount + 1);
     } else {
       setEquation((prevEquation) => prevEquation + '(');
-      setParenthCount((prevParenthCount) => prevParenthCount - 1);
+      setParenthCount((prevParenthCount) => prevParenthCount + 1);
     }
   };
 
@@ -94,28 +94,37 @@ export default function Calculator() {
     const operators = ['+', '-', '*', '/'];
     const lastCharacter = equation.slice(-1);
   
-    if (lastCharacter === '(') {
-      return;
-    } else if (parenthCount >= -1){
-      setEquation((prevEquation) =>{
-        const newEquation = prevEquation + ')';
-        setParenthCount((prevParenthCount => prevParenthCount + 1));
-        setResult(evaluate(newEquation));
-        return newEquation;
-      });
-      } else if (
-      parenthCount < 0 &&
-      !operators.includes(lastCharacter) &&
-      lastCharacter !== '('
+    if (
+      lastCharacter === '(' ||
+      (lastCharacter === ')' && parenthCount === 0) ||
+      operators.includes(lastCharacter) ||
+      parenthCount === 0
     ) {
+      return;
+    }
+  
+    if (parenthCount > 0) {
+      setParenthCount((prevParenthCount) => prevParenthCount - 1);
       setEquation((prevEquation) => {
         const newEquation = prevEquation + ')';
-        setParenthCount((prevParenthCount) => prevParenthCount + 1);
-        setResult("Close Parentheses");
+        if (parenthCount === 1) {
+          setResult(evaluate(newEquation));
+        }
         return newEquation;
-        });
+      });
+    } else {
+      setEquation((prevEquation) => prevEquation + ')');
+      setResult("Close Parentheses");
     }
-};
+    console.log(parenthCount);
+  };
+  
+
+  
+  
+  
+  
+  
   
   
   
