@@ -43,11 +43,11 @@ export default function Calculator() {
       } else {
         newEquation = prevEquation + ' ' + number;
       }
-      try {
-        setResult(evaluate(newEquation));
-      } catch (error) {
-        setResult("Close Parentheses");
-      }
+      if (parenthCount < 0){
+          setResult("Close Parentheses");
+        } else{
+          setResult(evaluate(newEquation));
+        }
       return newEquation;
     });
   };
@@ -93,30 +93,31 @@ export default function Calculator() {
   const handleRParenth = () => {
     const operators = ['+', '-', '*', '/'];
     const lastCharacter = equation.slice(-1);
-
+  
     if (lastCharacter === '(') {
       return;
-    }
-
-    if (
+    } else if (parenthCount >= -1){
+      setEquation((prevEquation) =>{
+        const newEquation = prevEquation + ')';
+        setParenthCount((prevParenthCount => prevParenthCount + 1));
+        setResult(evaluate(newEquation));
+        return newEquation;
+      });
+      } else if (
       parenthCount < 0 &&
       !operators.includes(lastCharacter) &&
       lastCharacter !== '('
     ) {
       setEquation((prevEquation) => {
         const newEquation = prevEquation + ')';
-        try {
-          setResult(evaluate(newEquation));
-        } catch (error) {
-          setResult(input);
-        }
+        setParenthCount((prevParenthCount) => prevParenthCount + 1);
+        setResult("Close Parentheses");
         return newEquation;
-      });
-      setParenthCount((prevParenthCount) => prevParenthCount + 1);
-    } else {
-      return;
+        });
     }
-  };
+};
+  
+  
   
   const handleC = () => {
     setInput(0);
