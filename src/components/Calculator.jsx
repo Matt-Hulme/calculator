@@ -11,6 +11,15 @@ export default function Calculator() {
   const [ history, setHistory] = useState([]);
 
   const handleNumeric = (number) => {
+    const equationArray = equation.split(' ');
+    const lastInputIndex = equationArray.length - 1;
+    const lastInput = equationArray[lastInputIndex];
+    const lastCharacter = equation.trim().slice(-1);
+  
+    if (number === 0 && (lastInput.toString() === "")) {
+      return;
+    }
+  
     setInput((prevInput) => {
       let newInput;
       if (prevInput === 0 || !prevInput.toString().includes('.')) {
@@ -24,19 +33,19 @@ export default function Calculator() {
     setEquation((prevEquation) => {
       let newEquation;
       const lastCharacter = prevEquation.trim().slice(-1);
-      if (lastCharacter === ')' || lastCharacter === "%"){
+      if (lastCharacter === ')' || lastCharacter === '%') {
         newEquation = prevEquation + ' * ' + number;
-      }else if(lastCharacter === '('){
+      } else if (lastCharacter === '(') {
         newEquation = prevEquation + number;
-      }else if(!isNaN(parseInt(lastCharacter, 10)) || lastCharacter === "."){
-        newEquation = prevEquation + number
-      }else {
-        newEquation = prevEquation + ' '+ number;
+      } else if (!isNaN(parseInt(lastCharacter, 10)) || lastCharacter === '.') {
+        newEquation = prevEquation + number;
+      } else {
+        newEquation = prevEquation + ' ' + number;
       }
       try {
         setResult(evaluate(newEquation));
       } catch (error) {
-        setResult(0);
+        setResult("Close Parentheses");
       }
       return newEquation;
     });
@@ -45,15 +54,19 @@ export default function Calculator() {
   
   
   
+  
  
 
   const handleDecimal = () => {
-    const operators = ['+', '-', '*', '/', '('];
+    const operators = ['+', '-', '*', '/'];
     const lastCharacter = equation.trim().slice(-1);
     if (/[\d.]/.test(lastCharacter) && !input.toString().includes('.')) {
       setInput((prevInput) => prevInput + '.');
       setEquation((prevEquation) => prevEquation + '.');
     } else if (operators.includes(lastCharacter) || lastCharacter ==""){
+      setInput((prevInput) => prevInput + ' 0.');
+      setEquation((prevEquation) => prevEquation + ' 0.');
+    } else if(lastCharacter === "("){
       setInput((prevInput) => prevInput + '0.');
       setEquation((prevEquation) => prevEquation + '0.');
     } else if (lastCharacter ==")"){
