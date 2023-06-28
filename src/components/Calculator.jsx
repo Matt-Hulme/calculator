@@ -50,12 +50,6 @@ export default function Calculator() {
       return newEquation;
     });
   };
-  
-  
-  
-  
-  
- 
 
   const handleDecimal = () => {
     const operators = ['+', '-', '*', '/'];
@@ -75,7 +69,6 @@ export default function Calculator() {
     }
   };
   
-
   const handleLParenth = () => {
     const operators = ['+', '-', '*'];
     const lastCharacter = equation.trim().slice(-1);
@@ -123,14 +116,12 @@ export default function Calculator() {
     }
   };
   
-
   const handleC = () => {
     setInput(0);
     setResult(0);
     setEquation('');
     setParenthCount(0);
   };
-
 
   const handleBackspace = () => {
     setInput((prevInput) => {
@@ -142,7 +133,9 @@ export default function Calculator() {
     setEquation((prevEquation) => {
       const lastCharacter = prevEquation.slice(-1);
       let newEquation;
-      if (lastCharacter && /\W/.test(lastCharacter)) {
+      if(lastCharacter == "(" || lastCharacter == ")"){
+        newEquation = prevEquation.slice(0, -1);
+      }else if (lastCharacter && /\W/.test(lastCharacter)) {
         newEquation = prevEquation.slice(0, -2);
       } else {
         newEquation = prevEquation.slice(0, -1);
@@ -160,7 +153,6 @@ export default function Calculator() {
       });
   };
 
-
   const handleAdd = () => {
     if (equation.length !== 0) {
       setEquation((prevEquation) => {
@@ -173,7 +165,6 @@ export default function Calculator() {
       setInput(0);
     }
   };
- 
   
   const handleSubtract = () => {
     if (equation.length !== 0) {
@@ -190,7 +181,6 @@ export default function Calculator() {
     }
   };
   
-
   const handleMultiply = () => {
     if (equation.length !== 0) {
       const lastCharacter = equation.slice(-1);
@@ -206,7 +196,6 @@ export default function Calculator() {
     }
   };
   
-
   const handleDivide = () => {
     if (equation.length !== 0) {
       const lastCharacter = equation.slice(-1);
@@ -221,7 +210,6 @@ export default function Calculator() {
       setInput(0);
     }
   };
-
 
   const handleXSquared = () => {
     setEquation((prevEquation) => {
@@ -241,7 +229,6 @@ export default function Calculator() {
     });
   };
 
-
   const handleInverseX = () => {
     setEquation((prevEquation) => {
       const equationArray = prevEquation.split(' ');
@@ -259,7 +246,6 @@ export default function Calculator() {
       return newEquation;
     });
   };
-
 
   const handleRootX = () => {
     setEquation((prevEquation) => {
@@ -280,7 +266,6 @@ export default function Calculator() {
     });
   };
 
-
   const handleNegate = () => {
     setEquation((prevEquation) => {
       const equationArray = prevEquation.split(' ');
@@ -299,7 +284,6 @@ export default function Calculator() {
       return newEquation;
     });
   };
-
 
   const handlePercentage = () => {
     setEquation((prevEquation) => {
@@ -324,10 +308,8 @@ export default function Calculator() {
     });
   };
 
-
   const handleEquals = () => {
   };
-  
   
   return (
     <div className="Calculator">
